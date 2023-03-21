@@ -968,6 +968,13 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
     : public __bool_constant<__is_abstract(_Tp)>
     { };
 
+  /// is_signed
+#if _GLIBCXX_USE_BUILTIN_TRAIT(__is_signed)
+  template<typename _Tp>
+    struct is_signed
+    : public __bool_constant<__is_signed(_Tp)>
+    { };
+#else
   /// @cond undocumented
   template<typename _Tp,
 	   bool = is_arithmetic<_Tp>::value>
@@ -980,11 +987,11 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
     { };
   /// @endcond
 
-  /// is_signed
   template<typename _Tp>
     struct is_signed
     : public __is_signed_helper<_Tp>::type
     { };
+#endif
 
   /// is_unsigned
 #if _GLIBCXX_USE_BUILTIN_TRAIT(__is_unsigned)
@@ -3430,8 +3437,13 @@ template <typename _Tp>
 template <typename _Tp>
   inline constexpr bool is_final_v = __is_final(_Tp);
 
+#if _GLIBCXX_USE_BUILTIN_TRAIT(__is_signed)
+template <typename _Tp>
+  inline constexpr bool is_signed_v = __is_signed(_Tp);
+#else
 template <typename _Tp>
   inline constexpr bool is_signed_v = is_signed<_Tp>::value;
+#endif
 
 #if _GLIBCXX_USE_BUILTIN_TRAIT(__is_unsigned)
 template <typename _Tp>
