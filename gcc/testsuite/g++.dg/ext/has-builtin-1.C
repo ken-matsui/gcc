@@ -164,6 +164,9 @@
 #if !__has_builtin (__is_union)
 # error "__has_builtin (__is_union) failed"
 #endif
+#if !__has_builtin (__is_unsigned)
+# error "__has_builtin (__is_unsigned) failed"
+#endif
 #if !__has_builtin (__reference_constructs_from_temporary)
 # error "__has_builtin (__reference_constructs_from_temporary) failed"
 #endif
