@@ -987,10 +987,17 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
     { };
 
   /// is_unsigned
+#if _GLIBCXX_USE_BUILTIN_TRAIT(__is_unsigned)
+  template<typename _Tp>
+    struct is_unsigned
+    : public __bool_constant<__is_unsigned(_Tp)>
+    { };
+#else
   template<typename _Tp>
     struct is_unsigned
     : public __and_<is_arithmetic<_Tp>, __not_<is_signed<_Tp>>>::type
     { };
+#endif
 
   /// @cond undocumented
   template<typename _Tp, typename _Up = _Tp&&>
@@ -3425,8 +3432,14 @@ template <typename _Tp>
 
 template <typename _Tp>
   inline constexpr bool is_signed_v = is_signed<_Tp>::value;
+
+#if _GLIBCXX_USE_BUILTIN_TRAIT(__is_unsigned)
+template <typename _Tp>
+  inline constexpr bool is_unsigned_v = __is_unsigned(_Tp);
+#else
 template <typename _Tp>
   inline constexpr bool is_unsigned_v = is_unsigned<_Tp>::value;
+#endif
 
 template <typename _Tp, typename... _Args>
   inline constexpr bool is_constructible_v = __is_constructible(_Tp, _Args...);
