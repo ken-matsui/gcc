@@ -12553,6 +12553,15 @@ trait_expr_value (cp_trait_kind kind, tree type1, tree type2)
     case CPTK_IS_SAME:
       return same_type_p (type1, type2);
 
+    case CPTK_IS_SCALAR:
+      return (TYPE_PTRDATAMEM_P (type1)
+	|| TREE_CODE (type1) == ENUMERAL_TYPE
+	|| integral_type_p (type1)
+	|| floating_point_type_p (type1)
+	|| TYPE_PTR_P (type1)
+	|| TYPE_PTRMEMFUNC_P (type1)
+	|| NULLPTR_TYPE_P (type1));
+
     case CPTK_IS_SCOPED_ENUM:
       return SCOPED_ENUM_P (type1);
 
@@ -12752,6 +12761,7 @@ finish_trait_expr (location_t loc, cp_trait_kind kind, tree type1, tree type2)
     case CPTK_IS_OBJECT:
     case CPTK_IS_REFERENCE:
     case CPTK_IS_SAME:
+    case CPTK_IS_SCALAR:
     case CPTK_IS_SCOPED_ENUM:
     case CPTK_IS_SIGNED:
     case CPTK_IS_UNION:
