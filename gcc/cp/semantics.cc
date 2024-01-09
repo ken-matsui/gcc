@@ -2818,7 +2818,7 @@ perform_koenig_lookup (cp_expr fn_expr, vec<tree, va_gc> *args,
 
   if (fn && template_id && fn != error_mark_node)
     fn = build2 (TEMPLATE_ID_EXPR, unknown_type_node, fn, tmpl_args);
-  
+
   return cp_expr (fn, loc);
 }
 
@@ -9324,7 +9324,7 @@ finish_omp_clauses (tree clauses, enum c_omp_region_type ort)
 	      && OMP_CLAUSE_CODE (c) != OMP_CLAUSE_SHARED
 	      && DECL_P (t))
 	    bitmap_clear_bit (&aligned_head, DECL_UID (t));
-	    
+
 	  if (VAR_P (t) && CP_DECL_THREAD_LOCAL_P (t))
 	    share_name = "threadprivate";
 	  else switch (cxx_omp_predetermined_sharing_1 (t))
@@ -12021,7 +12021,7 @@ pointer_interconvertible_base_of_p (tree base, tree derived)
   if (!NON_UNION_CLASS_TYPE_P (base)
       || !NON_UNION_CLASS_TYPE_P (derived))
     return false;
-    
+
   if (same_type_p (base, derived))
     return true;
 
@@ -12468,6 +12468,9 @@ trait_expr_value (cp_trait_kind kind, tree type1, tree type2)
     case CPTK_IS_ARRAY:
       return type_code1 == ARRAY_TYPE;
 
+    case CPTK_IS_ARITHMETIC:
+      return integral_type_p (type1) || floating_point_type_p (type1);
+
     case CPTK_IS_ASSIGNABLE:
       return is_xible (MODIFY_EXPR, type1, type2);
 
@@ -12728,6 +12731,7 @@ finish_trait_expr (location_t loc, cp_trait_kind kind, tree type1, tree type2)
       break;
 
     case CPTK_IS_ARRAY:
+    case CPTK_IS_ARITHMETIC:
     case CPTK_IS_BOUNDED_ARRAY:
     case CPTK_IS_CLASS:
     case CPTK_IS_ENUM:
