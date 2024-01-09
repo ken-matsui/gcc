@@ -728,10 +728,17 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 #endif
 
   /// is_arithmetic
+#if _GLIBCXX_USE_BUILTIN_TRAIT(__is_arithmetic)
+  template<typename _Tp>
+    struct is_arithmetic
+    : public __bool_constant<__is_arithmetic(_Tp)>
+    { };
+#else
   template<typename _Tp>
     struct is_arithmetic
     : public __or_<is_integral<_Tp>, is_floating_point<_Tp>>::type
     { };
+#endif
 
   /// is_fundamental
   template<typename _Tp>
@@ -3329,8 +3336,14 @@ template <typename _Tp>
   inline constexpr bool is_reference_v<_Tp&&> = true;
 #endif
 
+#if _GLIBCXX_USE_BUILTIN_TRAIT(__is_arithmetic)
+template <typename _Tp>
+  inline constexpr bool is_arithmetic_v = __is_arithmetic(_Tp);
+#else
 template <typename _Tp>
   inline constexpr bool is_arithmetic_v = is_arithmetic<_Tp>::value;
+#endif
+
 template <typename _Tp>
   inline constexpr bool is_fundamental_v = is_fundamental<_Tp>::value;
 
