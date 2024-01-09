@@ -12266,6 +12266,20 @@ is_corresponding_member_aggr (location_t loc, tree basetype1, tree membertype1,
   return ret;
 }
 
+/* Return true if T is an integral type.  With __STRICT_ANSI__, __int128 and
+   unsigned __int128 are not integral types.  */
+
+static bool
+integral_type_p (const_tree t)
+{
+  if (flag_iso)
+    return CP_INTEGRAL_TYPE_P (t)
+      && t != intTI_type_node
+      && t != unsigned_intTI_type_node;
+  else
+    return CP_INTEGRAL_TYPE_P (t);
+}
+
 /* Fold __builtin_is_corresponding_member call.  */
 
 tree
@@ -12472,6 +12486,9 @@ trait_expr_value (cp_trait_kind kind, tree type1, tree type2)
 
     case CPTK_IS_FUNCTION:
       return type_code1 == FUNCTION_TYPE;
+
+    case CPTK_IS_INTEGRAL:
+      return integral_type_p (type1);
 
     case CPTK_IS_LAYOUT_COMPATIBLE:
       return layout_compatible_type_p (type1, type2);
@@ -12699,6 +12716,7 @@ finish_trait_expr (location_t loc, cp_trait_kind kind, tree type1, tree type2)
     case CPTK_IS_CLASS:
     case CPTK_IS_ENUM:
     case CPTK_IS_FUNCTION:
+    case CPTK_IS_INTEGRAL:
     case CPTK_IS_MEMBER_FUNCTION_POINTER:
     case CPTK_IS_MEMBER_OBJECT_POINTER:
     case CPTK_IS_MEMBER_POINTER:

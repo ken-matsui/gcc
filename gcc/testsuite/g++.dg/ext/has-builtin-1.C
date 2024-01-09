@@ -89,6 +89,9 @@
 #if !__has_builtin (__is_function)
 # error "__has_builtin (__is_function) failed"
 #endif
+#if !__has_builtin (__is_integral)
+# error "__has_builtin (__is_integral) failed"
+#endif
 #if !__has_builtin (__is_layout_compatible)
 # error "__has_builtin (__is_layout_compatible) failed"
 #endif
