@@ -470,6 +470,13 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
     { };
 #endif
 
+#if _GLIBCXX_USE_BUILTIN_TRAIT(__is_floating_point)
+  /// is_floating_point
+  template<typename _Tp>
+    struct is_floating_point
+    : public __bool_constant<__is_floating_point(_Tp)>
+    { };
+#else
   /// @cond undocumented
   template<typename>
     struct __is_floating_point_helper
@@ -529,6 +536,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
     struct is_floating_point
     : public __is_floating_point_helper<__remove_cv_t<_Tp>>::type
     { };
+#endif
 
   /// is_array
 #if _GLIBCXX_USE_BUILTIN_TRAIT(__is_array)
@@ -3250,8 +3258,13 @@ template <typename _Tp>
   inline constexpr bool is_integral_v = is_integral<_Tp>::value;
 #endif
 
+#if _GLIBCXX_USE_BUILTIN_TRAIT(__is_floating_point)
+template <typename _Tp>
+  inline constexpr bool is_floating_point_v = __is_floating_point(_Tp);
+#else
 template <typename _Tp>
   inline constexpr bool is_floating_point_v = is_floating_point<_Tp>::value;
+#endif
 
 #if _GLIBCXX_USE_BUILTIN_TRAIT(__is_array)
 template <typename _Tp>
