@@ -12280,6 +12280,19 @@ integral_type_p (const_tree t)
     return CP_INTEGRAL_TYPE_P (t);
 }
 
+/* Return true if T is a floating point type.  With __STRICT_ANSI__, __float128
+   is not a floating point type.  However, _Float128 is a floating point type.
+   */
+
+static bool
+floating_point_type_p (const_tree t)
+{
+  if (flag_iso)
+    return SCALAR_FLOAT_TYPE_P (t) && t != float128t_type_node;
+  else
+    return SCALAR_FLOAT_TYPE_P (t);
+}
+
 /* Fold __builtin_is_corresponding_member call.  */
 
 tree
@@ -12483,6 +12496,9 @@ trait_expr_value (cp_trait_kind kind, tree type1, tree type2)
 
     case CPTK_IS_FINAL:
       return CLASS_TYPE_P (type1) && CLASSTYPE_FINAL (type1);
+
+    case CPTK_IS_FLOATING_POINT:
+      return floating_point_type_p (type1);
 
     case CPTK_IS_FUNCTION:
       return type_code1 == FUNCTION_TYPE;
@@ -12715,6 +12731,7 @@ finish_trait_expr (location_t loc, cp_trait_kind kind, tree type1, tree type2)
     case CPTK_IS_BOUNDED_ARRAY:
     case CPTK_IS_CLASS:
     case CPTK_IS_ENUM:
+    case CPTK_IS_FLOATING_POINT:
     case CPTK_IS_FUNCTION:
     case CPTK_IS_INTEGRAL:
     case CPTK_IS_MEMBER_FUNCTION_POINTER:

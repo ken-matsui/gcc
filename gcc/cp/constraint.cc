@@ -3785,6 +3785,9 @@ diagnose_trait_expr (tree expr, tree args)
     case CPTK_IS_FINAL:
       inform (loc, "  %qT is not a final class", t1);
       break;
+    case CPTK_IS_FLOATING_POINT:
+      inform (loc, "  %qT is not a floating point type", t1);
+      break;
     case CPTK_IS_FUNCTION:
       inform (loc, "  %qT is not a function", t1);
       break;
