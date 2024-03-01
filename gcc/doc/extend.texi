@@ -29481,83 +29481,95 @@ dispatching to call the right version at runtime.  Refer to the
 @uref{https://gcc.gnu.org/wiki/FunctionMultiVersioning, GCC wiki on
 Function Multiversioning} for more details.
 
-@node Type Traits
-@section Type Traits
+@node Type Trait Built-ins
+@section Type Trait Built-ins
 
 The C++ front end implements syntactic extensions that allow
-compile-time determination of 
-various characteristics of a type (or of a
-pair of types).
+compile-time determination of various characteristics of a type
+(or of a pair of types).
+
+
+@subsection Value-yielding Type Trait Built-ins
+
+Most of these built-ins return a @code{bool} result when invoked; the rest
+yields a @code{size_t} value.
 
 @defbuiltin{bool __has_nothrow_assign (@var{type})}
-If @var{type} is @code{const}-qualified or is a reference type then
-the trait is @code{false}.  Otherwise if @code{__has_trivial_assign (type)}
-is @code{true} then the trait is @code{true}, else if @var{type} is
+If @var{type} is @code{const}-qualified or is a reference type, then
+the trait is @code{false}.  Otherwise, if @code{__has_trivial_assign (type)}
+is @code{true}, then the trait is @code{true}, else if @var{type} is
 a cv-qualified class or union type with copy assignment operators that are
-known not to throw an exception then the trait is @code{true}, else it is
+known not to throw an exception, then the trait is @code{true}, else it is
 @code{false}.
 Requires: @var{type} shall be a complete type, (possibly cv-qualified)
 @code{void}, or an array of unknown bound.
 @enddefbuiltin
 
 @defbuiltin{bool __has_nothrow_constructor (@var{type})}
-If @code{__has_trivial_constructor (type)} is @code{true} then the trait
+If @code{__has_trivial_constructor (type)} is @code{true}, then the trait
 is @code{true}, else if @var{type} is a cv class or union type (or array
 thereof) with a default constructor that is known not to throw an
-exception then the trait is @code{true}, else it is @code{false}.
+exception, then the trait is @code{true}, else it is @code{false}.
 Requires: @var{type} shall be a complete type, (possibly cv-qualified)
 @code{void}, or an array of unknown bound.
 @enddefbuiltin
 
 @defbuiltin{bool __has_nothrow_copy (@var{type})}
-If @code{__has_trivial_copy (type)} is @code{true} then the trait is
+If @code{__has_trivial_copy (type)} is @code{true}, then the trait is
 @code{true}, else if @var{type} is a cv-qualified class or union type
-with copy constructors that are known not to throw an exception then
+with copy constructors that are known not to throw an exception, then
 the trait is @code{true}, else it is @code{false}.
 Requires: @var{type} shall be a complete type, (possibly cv-qualified)
 @code{void}, or an array of unknown bound.
 @enddefbuiltin
 
 @defbuiltin{bool __has_trivial_assign (@var{type})}
-If @var{type} is @code{const}- qualified or is a reference type then
+If @var{type} is @code{const}-qualified or is a reference type, then
 the trait is @code{false}.  Otherwise if @code{__is_trivial (type)} is
-@code{true} then the trait is @code{true}, else if @var{type} is
+@code{true}, then the trait is @code{true}, else if @var{type} is
 a cv-qualified class or union type with a trivial copy assignment
-([class.copy]) then the trait is @code{true}, else it is @code{false}.
+([class.copy]), then the trait is @code{true}, else it is @code{false}.
 Requires: @var{type} shall be a complete type, (possibly cv-qualified)
 @code{void}, or an array of unknown bound.
 @enddefbuiltin
 
 @defbuiltin{bool __has_trivial_constructor (@var{type})}
-If @code{__is_trivial (type)} is @code{true} then the trait is @code{true},
+If @code{__is_trivial (type)} is @code{true}, then the trait is @code{true},
 else if @var{type} is a cv-qualified class or union type (or array thereof)
-with a trivial default constructor ([class.ctor]) then the trait is @code{true},
-else it is @code{false}.
+with a trivial default constructor ([class.ctor]), then
+the trait is @code{true}, else it is @code{false}.
 Requires: @var{type} shall be a complete type, (possibly cv-qualified)
 @code{void}, or an array of unknown bound.
 @enddefbuiltin
 
 @defbuiltin{bool __has_trivial_copy (@var{type})}
 If @code{__is_trivial (type)} is @code{true} or @var{type} is a reference
-type then the trait is @code{true}, else if @var{type} is a cv class
-or union type with a trivial copy constructor ([class.copy]) then the trait
-is @code{true}, else it is @code{false}.  Requires: @var{type} shall be
-a complete type, (possibly cv-qualified) @code{void}, or an array of unknown
-bound.
+type, then the trait is @code{true}, else if @var{type} is a cv class
+or union type with a trivial copy constructor ([class.copy]), then the trait
+is @code{true}, else it is @code{false}.
+Requires: @var{type} shall be a complete type, (possibly cv-qualified)
+@code{void}, or an array of unknown bound.
 @enddefbuiltin
 
 @defbuiltin{bool __has_trivial_destructor (@var{type})}
-If @code{__is_trivial (type)} is @code{true} or @var{type} is a reference type
+If @code{__is_trivial (type)} is @code{true} or @var{type} is a reference type,
 then the trait is @code{true}, else if @var{type} is a cv class or union
-type (or array thereof) with a trivial destructor ([class.dtor]) then
+type (or array thereof) with a trivial destructor ([class.dtor]), then
 the trait is @code{true}, else it is @code{false}.
+Requires: @var{type} shall be a complete type, (possibly cv-qualified)
+@code{void}, or an array of unknown bound.
+@enddefbuiltin
+
+@defbuiltin{bool __has_unique_object_representations (@var{type})}
+If @code{__is_trivially_copyable (type)} is @code{true} and @var{type}
+has no padding bits, then the trait is @code{true}, else it is @code{false}.
 Requires: @var{type} shall be a complete type, (possibly cv-qualified)
 @code{void}, or an array of unknown bound.
 @enddefbuiltin
 
 @defbuiltin{bool __has_virtual_destructor (@var{type})}
 If @var{type} is a class type with a virtual destructor
-([class.dtor]) then the trait is @code{true}, else it is @code{false}.
+([class.dtor]), then the trait is @code{true}, else it is @code{false}.
 Requires: If @var{type} is a non-union class type, it shall be a complete type.
 @enddefbuiltin
 
@@ -29569,20 +29581,36 @@ efficient implementation of @code{std::make_integer_sequence}.
 @enddefbuiltin
 
 @defbuiltin{bool __is_abstract (@var{type})}
-If @var{type} is an abstract class ([class.abstract]) then the trait
+If @var{type} is an abstract class ([class.abstract]), then the trait
 is @code{true}, else it is @code{false}.
 Requires: If @var{type} is a non-union class type, it shall be a complete type.
 @enddefbuiltin
 
 @defbuiltin{bool __is_aggregate (@var{type})}
-If @var{type} is an aggregate type ([dcl.init.aggr]) the trait is
+If @var{type} is an aggregate type ([dcl.init.aggr]), then the trait is
 @code{true}, else it is @code{false}.
 Requires: If @var{type} is a class type, it shall be a complete type.
 @enddefbuiltin
 
+@anchor{__is_array}
+@defbuiltin{bool __is_array (@var{type})}
+If @var{type} is an array type ([dcl.array]), then calling this built-in
+returns @code{true}, else it returns @code{false}.
+See also: @ref{__is_bounded_array}.
+@enddefbuiltin
+
+@anchor{__is_assignable}
+@defbuiltin{bool __is_assignable (@var{type1}, @var{type2})}
+If @var{type1} is a class type with an assignment operator whose right
+operand can be a value of type @var{type2}, then calling this built-in
+returns @code{true}, else it returns @code{false}.
+Requires: If @var{type1} is a class type, it shall be a complete type.
+See also: @ref{__is_nothrow_assignable}, @ref{__is_trivially_assignable}.
+@enddefbuiltin
+
 @defbuiltin{bool __is_base_of (@var{base_type}, @var{derived_type})}
 If @var{base_type} is a base class of @var{derived_type}
-([class.derived]) then the trait is @code{true}, otherwise it is @code{false}.
+([class.derived]), then the trait is @code{true}, else it is @code{false}.
 Top-level cv-qualifications of @var{base_type} and
 @var{derived_type} are ignored.  For the purposes of this trait, a
 class type is considered is own base.
@@ -29592,9 +29620,33 @@ type (disregarding cv-qualifiers), @var{derived_type} shall be a complete
 type.  A diagnostic is produced if this requirement is not met.
 @enddefbuiltin
 
+@anchor{__is_bounded_array}
+@defbuiltin{bool __is_bounded_array (@var{type})}
+If @var{type} is an array type of known bound ([dcl.array]), then
+the trait is @code{true}, else it is @code{false}.
+See also: @ref{__is_array}.
+@enddefbuiltin
+
 @defbuiltin{bool __is_class (@var{type})}
-If @var{type} is a cv-qualified class type, and not a union type
-([basic.compound]) the trait is @code{true}, else it is @code{false}.
+If @var{type} is a (possibly cv-qualified) non-union class type
+([basic.compound]), then the trait is @code{true}, else it is @code{false}.
+@enddefbuiltin
+
+@anchor{__is_constructible}
+@defbuiltin{bool __is_constructible (@var{type}, @var{arg_types}...)}
+If @var{type} is an object or reference type that can be constructed with
+arguments of types @var{arg_types}..., then the trait is @code{true},
+else it is @code{false}.
+Requires: Each argument that is a class type shall be a complete type.
+See also: @ref{__is_nothrow_constructible}, @ref{__is_trivially_constructible}.
+@enddefbuiltin
+
+@anchor{__is_convertible}
+@defbuiltin{bool __is_convertible (@var{from_type}, @var{to_type})}
+If a value of @var{from_type} can be implicitly converted to a value of
+@var{to_type}, then the trait is @code{true}, else it is @code{false}.
+Requires: Each argument that is a class type shall be a complete type.
+See also: @ref{__is_nothrow_convertible}.
 @enddefbuiltin
 
 @c FIXME Commented out for GCC 13, discuss user interface for GCC 14.
@@ -29604,8 +29656,8 @@ If @var{type} is a cv-qualified class type, and not a union type
 @c @enddefbuiltin
 
 @defbuiltin{bool __is_empty (@var{type})}
-If @code{__is_class (type)} is @code{false} then the trait is @code{false}.
-Otherwise @var{type} is considered empty if and only if: @var{type}
+If @code{__is_class (type)} is @code{false}, then the trait is @code{false}.
+Otherwise, @var{type} is considered empty if and only if: @var{type}
 has no non-static data members, or all non-static data members, if
 any, are bit-fields of length 0, and @var{type} has no virtual
 members, and @var{type} has no virtual base classes, and @var{type}
@@ -29614,9 +29666,11 @@ has no base classes @var{base_type} for which
 Requires: If @var{type} is a non-union class type, it shall be a complete type.
 @enddefbuiltin
 
+@anchor{__is_enum}
 @defbuiltin{bool __is_enum (@var{type})}
-If @var{type} is a cv enumeration type ([basic.compound]) the trait is
+If @var{type} is a cv enumeration type ([basic.compound]), then the trait is
 @code{true}, else it is @code{false}.
+See also: @ref{__is_scoped_enum}.
 @enddefbuiltin
 
 @defbuiltin{bool __is_final (@var{type})}
@@ -29625,48 +29679,247 @@ is @code{true}, else it is @code{false}.
 Requires: If @var{type} is a class type, it shall be a complete type.
 @enddefbuiltin
 
+@defbuiltin{bool __is_function (@var{type})}
+If @var{type} is a function type ([dcl.fct]), then the trait is @code{true},
+else it is @code{false}.
+@enddefbuiltin
+
+@defbuiltin{bool __is_layout_compatible (@var{type1}, @var{type2})}
+If @var{type1} and @var{type2} are layout-compatible ([basic.types]), then
+the trait is @code{true}, else it is @code{false}.
+Requires: @var{type1} and @var{type2} shall be complete types, (possibly
+cv-qualified) @code{void}, or arrays of unknown bound.
+@enddefbuiltin
+
 @defbuiltin{bool __is_literal_type (@var{type})}
-If @var{type} is a literal type ([basic.types]) the trait is
+If @var{type} is a literal type ([basic.types]), then the trait is
 @code{true}, else it is @code{false}.
 Requires: @var{type} shall be a complete type, (possibly cv-qualified)
 @code{void}, or an array of unknown bound.
 @enddefbuiltin
 
+@anchor{__is_member_function_pointer}
+@defbuiltin{bool __is_member_function_pointer (@var{type})}
+If @var{type} is a pointer to member function type ([dcl.mptr]), then
+the trait is @code{true}, else it is @code{false}.
+See also: @ref{__is_member_object_pointer}, @ref{__is_member_pointer}.
+@enddefbuiltin
+
+@anchor{__is_member_object_pointer}
+@defbuiltin{bool __is_member_object_pointer (@var{type})}
+If @var{type} is a pointer to member object type ([dcl.mptr]), then
+the trait is @code{true}, else it is @code{false}.
+See also: @ref{__is_member_function_pointer}, @ref{__is_member_pointer}.
+@enddefbuiltin
+
+@anchor{__is_member_pointer}
+@defbuiltin{bool __is_member_pointer (@var{type})}
+If @var{type} is a pointer to member type ([dcl.mptr]), then the trait is
+@code{true}, else it is @code{false}.
+See also: @ref{__is_member_function_pointer}, @ref{__is_member_object_pointer}.
+@enddefbuiltin
+
+@anchor{__is_nothrow_assignable}
+@defbuiltin{bool __is_nothrow_assignable (@var{type1}, @var{type2})}
+If @code{__is_assignable (type1, type2)} is @code{true} and the assignment
+operation does not throw an exception, then the trait is @code{true}, else
+it is @code{false}.
+Requires: Each argument that is a class type shall be a complete type.
+See also: @ref{__is_assignable}, @ref{__is_trivially_assignable}.
+@enddefbuiltin
+
+@anchor{__is_nothrow_constructible}
+@defbuiltin{bool __is_nothrow_constructible (@var{type}, @var{arg_types}...)}
+If @code{__is_constructible (type, arg_types...)} is @code{true} and the
+construction does not throw an exception, then the trait is @code{true},
+else it is @code{false}.
+Requires: Each argument that is a class type shall be a complete type.
+See also: @ref{__is_constructible}, @ref{__is_trivially_constructible}.
+@enddefbuiltin
+
+@anchor{__is_nothrow_convertible}
+@defbuiltin{bool __is_nothrow_convertible (@var{from_type}, @var{to_type})}
+If @code{__is_convertible (from_type, to_type)} is @code{true} and the
+conversion does not throw an exception, then the trait is @code{true},
+else it is @code{false}.
+Requires: Each argument that is a class type shall be a complete type.
+See also: @ref{__is_convertible}.
+@enddefbuiltin
+
+@defbuiltin{bool __is_object (@var{type})}
+If @var{type} is an object type ([basic.types]), then the trait is
+@code{true}, else it is @code{false}.
+@enddefbuiltin
+
+@defbuiltin{bool __is_pointer_interconvertible_base_of (@var{base_type}, @var{derived_type})}
+If @var{base_type} and @var{derived_type} are pointer-interconvertible
+([conv.ptr]) and @var{base_type} is a base class of @var{derived_type}
+([class.derived]), then the trait is @code{true}, else it is @code{false}.
+Requires: if @code{__is_class (base_type)} and @code{__is_class (derived_type)}
+are @code{true} and @var{base_type} and @var{derived_type} are not the same
+type (disregarding cv-qualifiers), @var{derived_type} shall be a complete
+type.  A diagnostic is produced if this requirement is not met.
+@enddefbuiltin
+
 @defbuiltin{bool __is_pod (@var{type})}
-If @var{type} is a cv POD type ([basic.types]) then the trait is @code{true},
+If @var{type} is a cv POD type ([basic.types]), then the trait is @code{true},
 else it is @code{false}.
 Requires: @var{type} shall be a complete type, (possibly cv-qualified)
 @code{void}, or an array of unknown bound.
 @enddefbuiltin
 
 @defbuiltin{bool __is_polymorphic (@var{type})}
-If @var{type} is a polymorphic class ([class.virtual]) then the trait
+If @var{type} is a polymorphic class ([class.virtual]), then the trait
 is @code{true}, else it is @code{false}.
 Requires: If @var{type} is a non-union class type, it shall be a complete type.
 @enddefbuiltin
 
+@defbuiltin{bool __is_reference (@var{type})}
+If @var{type} is a reference type ([dcl.ref]), then the trait is @code{true},
+else it is @code{false}.
+@enddefbuiltin
+
+@defbuiltin{bool __is_same (@var{type1}, @var{type2})}
+If @var{type1} and @var{type2} refer to the same type, then the trait is
+@code{true}, else it is @code{false}.
+@enddefbuiltin
+
+@anchor{__is_scoped_enum}
+@defbuiltin{bool __is_scoped_enum (@var{type})}
+If @var{type} is a scoped enumeration type ([dcl.enum]), then the trait is
+@code{true}, else it is @code{false}.
+See also: @ref{__is_enum}.
+@enddefbuiltin
+
 @defbuiltin{bool __is_standard_layout (@var{type})}
-If @var{type} is a standard-layout type ([basic.types]) the trait is
+If @var{type} is a standard-layout type ([basic.types]), then the trait is
 @code{true}, else it is @code{false}.
 Requires: @var{type} shall be a complete type, an array of complete types,
 or (possibly cv-qualified) @code{void}.
 @enddefbuiltin
 
+@anchor{__is_trivial}
 @defbuiltin{bool __is_trivial (@var{type})}
-If @var{type} is a trivial type ([basic.types]) the trait is
+If @var{type} is a trivial type ([basic.types]), then the trait is
 @code{true}, else it is @code{false}.
 Requires: @var{type} shall be a complete type, an array of complete types,
 or (possibly cv-qualified) @code{void}.
+See also: @ref{__is_trivially_assignable}, @ref{__is_trivially_constructible},
+@ref{__is_trivially_copyable}.
+@enddefbuiltin
+
+@anchor{__is_trivially_assignable}
+@defbuiltin{bool __is_trivially_assignable (@var{type1}, @var{type2})}
+If @code{__is_assignable (type1, type2)} is @code{true} and
+@code{__is_trivial (type1)} is @code{true}, then the trait is @code{true},
+else it is @code{false}.
+Requires: Each argument that is a class type shall be a complete type.
+See also: @ref{__is_trivial}, @ref{__is_assignable},
+@ref{__is_nothrow_assignable}.
+@enddefbuiltin
+
+@anchor{__is_trivially_constructible}
+@defbuiltin{bool __is_trivially_constructible (@var{type}, @var{arg_types}...)}
+If @code{__is_constructible (type, arg_types...)} is @code{true} and
+@code{__is_trivial (type)} is @code{true}, then the trait is @code{true},
+else it is @code{false}.
+Requires: Each argument that is a class type shall be a complete type.
+See also: @ref{__is_trivial}, @ref{__is_constructible},
+@ref{__is_nothrow_constructible}.
+@enddefbuiltin
+
+@anchor{__is_trivially_copyable}
+@defbuiltin{bool __is_trivially_copyable (@var{type})}
+If @var{type} is a trivially copyable type ([basic.types]), then the trait is
+@code{true}, else it is @code{false}.
+Requires: @var{type} shall be a complete type, an array of complete types,
+or (possibly cv-qualified) @code{void}.
+See also: @ref{__is_trivial}.
 @enddefbuiltin
 
 @defbuiltin{bool __is_union (@var{type})}
-If @var{type} is a cv union type ([basic.compound]) the trait is
+If @var{type} is a cv union type ([basic.compound]), then the trait is
 @code{true}, else it is @code{false}.
 @enddefbuiltin
 
-@defbuiltin{bool __underlying_type (@var{type})}
-The underlying type of @var{type}.
-Requires: @var{type} shall be an enumeration type ([dcl.enum]).
+@anchor{__reference_constructs_from_temporary}
+@defbuiltin{bool __reference_constructs_from_temporary (@var{type1}, @var{type2})}
+If @var{type1} is a reference type and a value of type @var{type2} can be
+bound to @var{type1} in direct-initialization, such that a temporary object
+would be bound to the reference, then the trait is @code{true},
+else it is @code{false}.
+Requires: Each argument that is a class type shall be a complete type.
+See also: @ref{__reference_converts_from_temporary}
+@enddefbuiltin
+
+@anchor{__reference_converts_from_temporary}
+@defbuiltin{bool __reference_converts_from_temporary (@var{type1}, @var{type2})}
+If @var{type1} is a reference type and a value of type @var{type2} can be
+bound to @var{type1} in copy-initialization, such that a temporary object
+would be bound to the reference, then the trait is @code{true},
+else it is @code{false}.
+Requires: Each argument that is a class type shall be a complete type.
+See also: @ref{__reference_constructs_from_temporary}
+@enddefbuiltin
+
+
+@subsection Type-yielding Type Trait Built-ins
+
+Most of these built-ins return a type when invoked; the rest yields
+a list of types.
+
+@anchor{__bases}
+@defbuiltin{@var{types}... __bases (@var{type})}
+If @var{type} is a class type ([class.derived]), then the trait is a
+typelist of the base classes of @var{type}, else it is an empty typelist.
+See also: @ref{__direct_bases}.
+@enddefbuiltin
+
+@anchor{__direct_bases}
+@defbuiltin{@var{types}... __direct_bases (@var{type})}
+If @var{type} is a class type ([class.derived]), then the trait is a
+typelist of the direct base classes of @var{type}, else it is an empty
+typelist.
+See also: @ref{__bases}.
+@enddefbuiltin
+
+@anchor{__remove_cv}
+@defbuiltin{@var{type} __remove_cv (@var{cv_type})}
+If @var{cv_type} is a cv-qualified type ([basic.type.qualifier]), then the
+trait is the type @var{type} of @var{cv_type} with its top-level cv-qualifiers
+removed, else it is @var{cv_type}.
+See also: @ref{__remove_cvref}
+@enddefbuiltin
+
+@anchor{__remove_cvref}
+@defbuiltin{@var{type} __remove_cvref (@var{cvref_type})}
+If @var{cvref_type} is a cv-qualified ([basic.type.qualifier]) or reference
+type ([dcl.ref]), then the trait is the type @var{type} of
+@var{cvref_type} with its top-level cv-qualifiers and reference removed,
+else it is @var{cvref_type}.
+See also: @ref{__remove_cv}, @ref{__remove_reference}.
+@enddefbuiltin
+
+@defbuiltin{@var{type} __remove_pointer (@var{ptr_type})}
+If @var{ptr_type} is a pointer type ([dcl.ptr]), then the trait is the
+@var{type} pointed to by @var{ptr_type}, else it is @var{ptr_type}.
+@enddefbuiltin
+
+@anchor{__remove_reference}
+@defbuiltin{@var{type} __remove_reference (@var{ref_type})}
+If @var{ref_type} is a reference type ([dcl.ref]), then the trait is the
+@var{type} referred to by @var{ref_type}, else it is @var{ref_type}.
+See also: @ref{__remove_cvref}
+@enddefbuiltin
+
+@defbuiltin{@var{type} __type_pack_element (int @var{index}, @var{types}...)}
+If @code{0 < @var{index} < sizeof...(@var{types})}, then the trait is the
+@var{index}-th type in the pack @var{types}..., else it emits an error.
+@enddefbuiltin
+
+@defbuiltin{@var{type} __underlying_type (@var{enum_type})}
+If @var{enum_type} is a complete enumeration type ([dcl.enum]), then
+the trait is the underlying type of @var{enum_type}, else it emits an error.
 @enddefbuiltin
 
 
@@ -29707,15 +29960,6 @@ requirements on types and their values.
 Introduces constraints on template arguments or requirements for a member
 function of a class template.
 @end table
-
-The front end also exposes a number of internal mechanism that can be used
-to simplify the writing of type traits. Note that some of these traits are
-likely to be removed in the future.
-
-@defbuiltin{bool __is_same (@var{type1}, @var{type2})}
-A binary type trait: @code{true} whenever the @var{type1} and
-@var{type2} refer to the same type.
-@enddefbuiltin
 
 
 @node Deprecated Features
