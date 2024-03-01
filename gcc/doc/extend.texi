@@ -29500,20 +29500,20 @@ Requires: @var{type} shall be a complete type, (possibly cv-qualified)
 @code{void}, or an array of unknown bound.
 @enddefbuiltin
 
-@defbuiltin{bool __has_nothrow_copy (@var{type})}
-If @code{__has_trivial_copy (type)} is @code{true} then the trait is
-@code{true}, else if @var{type} is a cv-qualified class or union type
-with copy constructors that are known not to throw an exception then
-the trait is @code{true}, else it is @code{false}.
-Requires: @var{type} shall be a complete type, (possibly cv-qualified)
-@code{void}, or an array of unknown bound.
-@enddefbuiltin
-
 @defbuiltin{bool __has_nothrow_constructor (@var{type})}
 If @code{__has_trivial_constructor (type)} is @code{true} then the trait
 is @code{true}, else if @var{type} is a cv class or union type (or array
 thereof) with a default constructor that is known not to throw an
 exception then the trait is @code{true}, else it is @code{false}.
+Requires: @var{type} shall be a complete type, (possibly cv-qualified)
+@code{void}, or an array of unknown bound.
+@enddefbuiltin
+
+@defbuiltin{bool __has_nothrow_copy (@var{type})}
+If @code{__has_trivial_copy (type)} is @code{true} then the trait is
+@code{true}, else if @var{type} is a cv-qualified class or union type
+with copy constructors that are known not to throw an exception then
+the trait is @code{true}, else it is @code{false}.
 Requires: @var{type} shall be a complete type, (possibly cv-qualified)
 @code{void}, or an array of unknown bound.
 @enddefbuiltin
@@ -29528,15 +29528,6 @@ Requires: @var{type} shall be a complete type, (possibly cv-qualified)
 @code{void}, or an array of unknown bound.
 @enddefbuiltin
 
-@defbuiltin{bool __has_trivial_copy (@var{type})}
-If @code{__is_trivial (type)} is @code{true} or @var{type} is a reference
-type then the trait is @code{true}, else if @var{type} is a cv class
-or union type with a trivial copy constructor ([class.copy]) then the trait
-is @code{true}, else it is @code{false}.  Requires: @var{type} shall be
-a complete type, (possibly cv-qualified) @code{void}, or an array of unknown
-bound.
-@enddefbuiltin
-
 @defbuiltin{bool __has_trivial_constructor (@var{type})}
 If @code{__is_trivial (type)} is @code{true} then the trait is @code{true},
 else if @var{type} is a cv-qualified class or union type (or array thereof)
@@ -29544,6 +29535,15 @@ with a trivial default constructor ([class.ctor]) then the trait is @code{true},
 else it is @code{false}.
 Requires: @var{type} shall be a complete type, (possibly cv-qualified)
 @code{void}, or an array of unknown bound.
+@enddefbuiltin
+
+@defbuiltin{bool __has_trivial_copy (@var{type})}
+If @code{__is_trivial (type)} is @code{true} or @var{type} is a reference
+type then the trait is @code{true}, else if @var{type} is a cv class
+or union type with a trivial copy constructor ([class.copy]) then the trait
+is @code{true}, else it is @code{false}.  Requires: @var{type} shall be
+a complete type, (possibly cv-qualified) @code{void}, or an array of unknown
+bound.
 @enddefbuiltin
 
 @defbuiltin{bool __has_trivial_destructor (@var{type})}
@@ -29559,6 +29559,13 @@ Requires: @var{type} shall be a complete type, (possibly cv-qualified)
 If @var{type} is a class type with a virtual destructor
 ([class.dtor]) then the trait is @code{true}, else it is @code{false}.
 Requires: If @var{type} is a non-union class type, it shall be a complete type.
+@enddefbuiltin
+
+@defbuiltin{bool __integer_pack (@var{length})}
+When used as the pattern of a pack expansion within a template
+definition, expands to a template argument pack containing integers
+from @code{0} to @code{@var{length}-1}.  This is provided for
+efficient implementation of @code{std::make_integer_sequence}.
 @enddefbuiltin
 
 @defbuiltin{bool __is_abstract (@var{type})}
@@ -29660,13 +29667,6 @@ If @var{type} is a cv union type ([basic.compound]) the trait is
 @defbuiltin{bool __underlying_type (@var{type})}
 The underlying type of @var{type}.
 Requires: @var{type} shall be an enumeration type ([dcl.enum]).
-@enddefbuiltin
-
-@defbuiltin{bool __integer_pack (@var{length})}
-When used as the pattern of a pack expansion within a template
-definition, expands to a template argument pack containing integers
-from @code{0} to @code{@var{length}-1}.  This is provided for
-efficient implementation of @code{std::make_integer_sequence}.
 @enddefbuiltin
 
 
