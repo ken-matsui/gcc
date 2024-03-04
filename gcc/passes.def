@@ -84,6 +84,9 @@ along with GCC; see the file COPYING3.  If not see
 	  /* After CCP we rewrite no longer addressed locals into SSA
 	     form if possible.  */
 	  NEXT_PASS (pass_forwprop);
+	  /* Do cmp before early_thread_jumps and vrp since it may
+	     modify conditions.  */
+	  NEXT_PASS (pass_cmp);
           NEXT_PASS (pass_early_thread_jumps, /*first=*/true);
 	  NEXT_PASS (pass_sra_early);
 	  /* pass_build_ealias is a dummy pass that ensures that we

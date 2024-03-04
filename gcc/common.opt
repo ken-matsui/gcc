@@ -3053,6 +3053,10 @@ ftree-ch
 Common Var(flag_tree_ch) Optimization
 Enable loop header copying on trees.
 
+ftree-cmp
+Common Var(flag_tree_cmp) Optimization
+Enable SSA comparison optimization on trees.
+
 ftree-coalesce-inlined-vars
 Common Ignore RejectNegative
 Does nothing.  Preserved for backward compatibility.
